@@ -11,7 +11,8 @@ class PDFUploadRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        //Remember to change this when sanctum is wrapped in, or based on RBP's
+        return true;
     }
 
     /**
@@ -19,10 +20,12 @@ class PDFUploadRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
+
+    /*We'd need one or two custom rules here to allow a B64 string to enter through the controller, however PDF uploads are supported!*/
     public function rules(): array
     {
         return [
-            //
+            'pdf'=>'required|mimetypes:application/pdf|max:10000'
         ];
     }
 }
