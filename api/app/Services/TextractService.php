@@ -11,12 +11,10 @@ class TextractService
 {
 
     private $textract;
-    private $options;
 
     public function __construct()
     {
         $this->textract = App::make('aws')->createClient('textract');
-        $this->options = $this->setDefaultOptions();
     }
 
     /**
@@ -24,10 +22,25 @@ class TextractService
      *
      * @param $file
      */
-    public function MakeTextractAPICall($file){
-       $this->addFileToDefaultOptions($file);
+    public function makeTextractAPICall($file){
        try{
-           $document = $this->textract->analyzeDocument($this->options);
+
+           /*
+           These could reall be config'd or similar to prevent us needing to extend/provide new ones in.  Perhaps even piped
+           in a s a parameter and having a bunch of presets could be a good option, depending on what configs we might need in
+           our projects.
+           */
+
+           $options = [
+               'Document' => [
+                   'Bytes' => $file,
+               ],
+               'FeatureTypes' => ['FORMS'], // REQUIRED
+           ];
+
+           $document = $this->textract->analyzeDocument($options);
+
+           $this->parseAndStoreDocumentChunks($document);
 
            //Parse this into database
 
@@ -38,25 +51,10 @@ class TextractService
     }
 
 
-    /**
-     * Could probably move this to 'config' but for now, here's  fine.  We can write more methods if needed to manipulate
-     * additional or different config into these options
-     */
-    private function setDefaultOptions(){
-        $this->options = $options = [
-            'Document' => [
 
-            ],
-            'FeatureTypes' => ['FORMS'], // REQUIRED
-        ];
-    }
+   
 
-    /**
-     * This, for example, will add the file provided to the default options, we'll need to do this before we call the SDK
-     * @param $file
-     */
-    public function addFileToDefaultOptions($file){
-        $this->options['Documnet']['Bytes'] = $file;
-    }
+
+
 
 }
