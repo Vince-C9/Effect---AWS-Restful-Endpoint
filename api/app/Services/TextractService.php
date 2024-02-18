@@ -2,6 +2,7 @@
 
 
 namespace App\Services;
+use App\Models\PDFContent;
 use Aws\Sdk;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
@@ -38,13 +39,7 @@ class TextractService
                'FeatureTypes' => ['FORMS'], // REQUIRED
            ];
 
-           $document = $this->textract->analyzeDocument($options);
-
-           $this->parseAndStoreDocumentChunks($document);
-
-           //Parse this into database
-
-           //return good
+           return $this->textract->analyzeDocument($options);
        } catch (Throwable $t){
            report('Error: '.$t->getMessage());
        }
@@ -52,7 +47,19 @@ class TextractService
 
 
 
-   
+    public function parseAndStoreDocumentChunks($textractResponse, $filename){
+        dd($textractResponse);
+        $pages=$textractResponse['DocumentMetadata']['Pages'];
+        $content = PDFContent::create([
+            'name'=>$filename,
+            'pages'=>$pages
+        ]);
+
+
+        foreach($textractResponse['Blocks'] as $block){
+
+        }
+    }
 
 
 

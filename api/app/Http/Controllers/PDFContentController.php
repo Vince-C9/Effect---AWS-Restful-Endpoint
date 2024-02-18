@@ -32,6 +32,8 @@ class PDFContentController extends Controller
         $file = $request->file('pdf')->getContent();
         $response = $this->textract->makeTextractAPICall($file);
 
+        $this->textract->parseAndStoreDocumentChunks($response, $request->file('pdf')->getClientOriginalName().'-'.date('Ymd-His'));
+
         dd($response);
     }
 }
