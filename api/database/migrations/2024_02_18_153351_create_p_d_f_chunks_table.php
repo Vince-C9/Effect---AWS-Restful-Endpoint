@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //With only a few hours and AWS being the focus, I just want to show that I know how to save data.
-        Schema::create('p_d_f_contents', function (Blueprint $table) {
+        Schema::create('p_d_f_chunks', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->integer('pages');
+            $table->integer('p_d_f_contents_id');
+            $table->json('block_data');
+            $table->string('text')->nullable();
+            $table->string('block_type')->nullable();
+            $table->float('confidence')->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('p_d_f_contents');
+        Schema::dropIfExists('p_d_f_chunks');
     }
 };

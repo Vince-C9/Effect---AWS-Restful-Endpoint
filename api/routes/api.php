@@ -22,7 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::prefix('pdf')->group(function(){
-    Route::post('upload', [PDFContentController::class, 'store']);
+    Route::post('convert', [PDFContentController::class, 'store'])->name('pdf.convert');
 
     /*To come if time*/
     Route::get('/{id}');
