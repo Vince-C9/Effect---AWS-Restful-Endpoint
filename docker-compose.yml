@@ -40,7 +40,7 @@ services:
     container_name: effect_db
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: acme_door_keys
+      MYSQL_DATABASE: effect_database
       MYSQL_ROOT_PASSWORD: secret
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
