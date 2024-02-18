@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PDFUploadRequest;
 use App\Services\PDFService;
 use App\Services\TextractService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 
 class PDFContentController extends Controller
 {
@@ -31,9 +29,7 @@ class PDFContentController extends Controller
          */
         $file = $request->file('pdf')->getContent();
         $response = $this->textract->makeTextractAPICall($file);
-
         $savedData = $this->textract->parseAndStoreDocumentChunks($response, $request->file('pdf')->getClientOriginalName().'-'.date('Ymd-His'));
-
-        dd($response);
+        return $savedData;
     }
 }

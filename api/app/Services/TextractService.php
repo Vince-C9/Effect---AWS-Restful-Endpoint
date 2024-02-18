@@ -64,24 +64,26 @@ class TextractService
                 'pages' => $pages
             ]);
 
-
             foreach ($textractResponse['Blocks'] as $block) {
                 /**
                  * There are better ways to set up the relationships than saving the ID directly to them create field.
                  * Examples are the 'associate' method, but I'm on a strict timeline here! :)
                  */
+
                 PDFChunks::create([
                     'p_d_f_contents_id' => $content->id,
                     'block_data' => json_encode($block),
-                    'text' => $block['Text'] ? $block['Text'] : null,
-                    'block_type' => $block['BlockType'],
-                    'confidence' => $block['Confidence'],
+                    'text' => !empty($block['Text']) ? $block['Text'] : null,
+                    'block_type' => !empty($block['BlockType'])? $block['BlockType'] : null,
+                    'confidence' => !empty($block['Confidence']) ? $block['Confidence'] : null,
                 ]);
-
             }
 
+            //Could do with globalising this and making it a standard format.
+            return response()->json(['status'=>200, 'message'=>'Content written to database']);
 
         } catch (Throwable $t) {
+
             DB::rollBack();
             report($t->getMessage());
         }
