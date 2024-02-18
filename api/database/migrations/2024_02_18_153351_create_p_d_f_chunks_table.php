@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('p_d_f_chunks', function (Blueprint $table) {
             $table->id();
+            $table->integer('p_d_f_contents_id');
+            $table->json('block_data');
+            $table->string('text')->nullable();
+            $table->string('block_type');
+            $table->float('confidence');
             $table->timestamps();
         });
     }
