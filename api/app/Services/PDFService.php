@@ -25,4 +25,19 @@ class PDFService
     private function getIsBase64($file){
         return base64_encode(base64_decode($file, true)) === $file;
     }
+
+
+    /**
+     * Decodes base64 file to real file, if it is encoded.
+     * @param $file
+     * @return bool
+     */
+
+    public function convertB64toPDF($file){
+        return $this->getIsBase64($file) ? base64_decode($file) : $file;
+    }
+
+
+
+
 }
