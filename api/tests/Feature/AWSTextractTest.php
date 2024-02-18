@@ -6,18 +6,18 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class AWSTextractTest extends TestCase
 {
+    //Changed my mind, gonna just do file uploads.  Why not? :)  Just means I'll need to test this using postman until I can wrap in a front end.
     /** @test
      * It can
      */
     public function it_can_fake_a_call_to_aws_and_parse_a_response(){
         Http::fake();
         $response = $this->post(route('pdf.convert'), [
-            'pdf'=>'/pdf/sample.pdf'
+            'pdf'=>UploadedFile::fake()->create('test.pdf',100)
         ]);
 
         $response->assertOk();
@@ -34,7 +34,8 @@ class AWSTextractTest extends TestCase
     public function it_doesnt_allow_invalid_files_past_the_request(){
         Http::fake();
         $response = $this->post(route('pdf.convert'), [
-            'pdf'=>'/pdf/invalid.txt'
+
+            'pdf'=>UploadedFile::fake()->create('test.txt',100)
         ]);
 
         $response->assertSessionHasErrors();
