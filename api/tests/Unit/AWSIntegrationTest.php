@@ -3,8 +3,10 @@
 namespace Tests\Unit;
 
 use Illuminate\Support\Facades\Storage;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
+use App\Services\PDFService;
 use function PHPUnit\Framework\assertTrue;
+
 
 class AWSIntegrationTest extends TestCase
 {
@@ -21,10 +23,11 @@ class AWSIntegrationTest extends TestCase
      * @test
      * Fake an API call to the Textract API and handle the response
      */
-    public function it_can_call_the_textract_api_with_valid_data_and_handle_the_response()
+    public function it_can_find_a_locally_stored_pdf_and_convert_it_to_pdf()
     {
         $PDFService = new PDFService();
-        $pdf = $PDFService->convertPDFToB64(Storage::disk('local')->get('pdf/sample.pdf'));
+        $path ='pdf/sample.pdf';
+        $pdf = $PDFService->convertPDFToB64($path);
 
         //Ascertain whether it's base64 encoded
         assertTrue(base64_encode(base64_decode($pdf, true)) === $pdf);
