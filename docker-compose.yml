@@ -1,0 +1,74 @@
+version: "3"
+services:
+  effect_api:
+    build:
+      args:
+        user: admin
+        uid: 1000
+      context: ./api/
+      dockerfile: Dockerfile
+    depends_on:
+      - effect_db
+    image: effect_api
+    container_name: effect_api
+    restart: unless-stopped
+    working_dir: /var/www/api/
+    volumes:
+      - ./:/var/www
+    networks:
+      - default
+
+  #Come back to this if there's time
+  #effect_client:
+  #  build:
+  #    context: ./client/
+  #    dockerfile: Dockerfile
+  #  ports:
+  #    - '8081:8080'
+  #  image: effect_client
+  #  container_name: effect_client
+  #  restart: unless-stopped
+  #  working_dir: /var/www/client/
+  #  volumes:
+  #    - '.:/app'
+  #    - '/app/node_modules'
+  #  networks:
+  #    - default
+
+  effect_db:
+    image: mysql:8.0
+    container_name: effect_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: effect_database
+      MYSQL_ROOT_PASSWORD: secret
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    ports:
+      - 3306:3306
+    volumes:
+      - ./docker-compose/mysql:/docker-entrypoint-initdb.d
+    networks:
+      - default
+
+  nginx:
+    image: nginx:alpine
+    container_name: effect-nginx
+    restart: unless-stopped
+    ports:
+      - 8000:80
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
+    depends_on:
+      - effect_api
+    networks:
+      - default
+
+networks:
+  default:
+    driver: bridge
+
+#Considerations for improvement
+# - Redis installation & link between either/or/both client and api for caching & sessions.
+# - PHPredis extension and module installed on API container.
