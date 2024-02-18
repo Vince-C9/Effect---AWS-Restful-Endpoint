@@ -16,8 +16,8 @@ return new class extends Migration
             $table->integer('p_d_f_contents_id');
             $table->json('block_data');
             $table->string('text')->nullable();
-            $table->string('block_type');
-            $table->float('confidence');
+            $table->string('block_type')->nullable();
+            $table->float('confidence')->nullable();
             $table->timestamps();
         });
     }
