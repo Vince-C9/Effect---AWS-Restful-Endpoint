@@ -38,8 +38,10 @@ class AWSTextractTest extends TestCase
             'pdf'=>UploadedFile::fake()->create('test.txt',100)
         ]);
 
+        //We could go into more depth here if needed. EG exactly the error code, etc.
         $response->assertSessionHasErrors();
     }
+
 
     /**
      * @test
