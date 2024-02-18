@@ -16,12 +16,12 @@ class AWSTextractTest extends TestCase
     /** @test
      * It can post valid data to the endpoint and store it in the database.
      */
-    public function it_can_fake_a_call_to_aws_and_parse_a_response(){
-        Http::fake();
+    public function it_can_make_a_call_to_aws_and_parse_a_response(){
         $chunksBefore = PDFChunks::count();
         $storedBefore = PDFContent::count();
+        $file = UploadedFile::fake()->createWithContent('test.pdf','Hello, this is a test PDF :)')->mimeType('application/pdf');
         $response = $this->post(route('pdf.convert'), [
-            'pdf'=>UploadedFile::fake()->create('test.pdf',100)
+            'pdf'=>$file
         ]);
 
         $response->assertOk();
@@ -38,9 +38,8 @@ class AWSTextractTest extends TestCase
      * To save time I've got one stored ready to test in the file structure - probably wouldn't usually do this!
      */
     public function it_doesnt_allow_invalid_files_past_the_request(){
-        Http::fake();
         $response = $this->post(route('pdf.convert'), [
-            'pdf'=>UploadedFile::fake()->create('test.txt',100)
+            'pdf' => UploadedFile::fake()->createWithContent('test.txt','Hello, this is a test PDF in disguise!  I am actually a text file!')
         ]);
 
         //We could go into more depth here if needed. EG exactly the error code, etc.
