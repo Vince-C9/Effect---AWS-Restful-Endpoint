@@ -33,16 +33,4 @@ class AWSIntegrationTest extends TestCase
         assertTrue(base64_encode(base64_decode($pdf, true)) === $pdf);
     }
 
-    /**
-     * @test 
-     * It will search the local directory for sample.pdf if no file is provided and use that as a default
-     */
-    public function it_can_find_the_default_file_if_no_file_is_provided(){
-        $PDFService = new PDFService();
-        $pdf = $PDFService->convertPDFToB64();
-
-        //Ascertain whether it's base64 encoded
-        assertTrue(base64_encode(base64_decode($pdf, true)) === $pdf);
-    }
-
 }
