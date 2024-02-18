@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        //With only a few hours and AWS being the focus, I just want to show that I know how to save data.
         Schema::create('p_d_f_contents', function (Blueprint $table) {
             $table->id();
+            $table->json('content');
             $table->timestamps();
         });
     }
